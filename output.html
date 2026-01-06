@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Registration</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#7F00FF;
+      --bg2:#E100FF;
+      --card-bg: rgba(255,255,255,0.12);
+      --card-border: rgba(255,255,255,0.25);
+      --text:#ffffff;
+      --muted:#e9e9f3;
+      --accent:#00E5FF;
+      --accent-2:#00FFA3;
+      --error:#ff6b6b;
+      --shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{
+      height: 100%;
+      margin: 0;
+      font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2)) fixed;
+    }
+
+    .container{
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 32px 16px;
+    }
+
+    .card{
+      width: 100%;
+      max-width: 760px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(14px) saturate(120%);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-header{
+      padding: 24px 28px;
+      background: linear-gradient(90deg, rgba(0,229,255,0.25), rgba(0,255,163,0.25));
+      border-bottom: 1px solid var(--card-border);
+    }
+    .title{
+      margin: 0;
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+    }
+    .subtitle{
+      margin: 6px 0 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    form{
+      padding: 26px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+
+    .field{
+      grid-column: span 12;
+      display: flex;
+      flex-direction: column;
+    }
+    @media (min-width: 640px){
+      .field.half{ grid-column: span 6; }
+      .field.third{ grid-column: span 4; }
+    }
+
+    label{
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      color: var(--muted);
+    }
+
+    .input, select, textarea{
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.15);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.06s ease;
+    }
+    .input::placeholder{ color: rgba(255,255,255,0.75); }
+    select{ appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%), linear-gradient(135deg, var(--accent) 50%, transparent 50%); background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px); background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
+
+    .input:focus, select:focus, textarea:focus{
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(0,229,255,0.25);
+      transform: translateY(-1px);
+    }
+
+    .radio-group, .checkbox-group{
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .option{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.12);
+      cursor: pointer;
+      transition: transform 0.06s ease, border-color 0.2s ease;
+    }
+    .option:hover{ transform: translateY(-1px); border-color: var(--accent-2); }
+    .option input{ accent-color: var(--accent-2); }
+
+    .actions{
+      grid-column: span 12;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .btn{
+      appearance: none;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: transform 0.06s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+    .btn-primary{
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #002b36;
+      box-shadow: 0 10px 20px rgba(0,229,255,0.25);
+    }
+    .btn-primary:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+    .btn-secondary{
+      background: rgba(255,255,255,0.18);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+    .btn-secondary:hover{ transform: translateY(-1px); }
+
+    .helper{
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Simple required indicator */
+    .req::after{
+      content: " *";
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Footer */
+    .card-footer{
+      padding: 18px 26px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* Accessibility focus outline for buttons */
+    .btn:focus-visible{
+      outline: 3px solid rgba(0,255,163,0.6);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card" role="region" aria-labelledby="form-title">
+      <header class="card-header">
+        <h1 id="form-title" class="title">Student Registration</h1>
+        <p class="subtitle">Fill in your details to enroll—fast, friendly, and colorful.</p>
+      </header>
+
+      <form action="#" method="post" novalidate>
+        <!-- Name -->
+        <div class="field half">
+          <label for="fullName" class="req">Full name</label>
+          <input class="input" type="text" id="fullName" name="fullName" placeholder="e.g., Priya Sharma" required />
+          <span class="helper">Use your official name as per records.</span>
+        </div>
+
+        <!-- Age -->
+        <div class="field third">
+          <label for="age" class="req">Age</label>
+          <input class="input" type="number" id="age" name="age" min="10" max="100" placeholder="18" required />
+        </div>
+
+        <!-- Gender -->
+        <div class="field third">
+          <label class="req">Gender</label>
+          <div class="radio-group" role="radiogroup" aria-label="Gender">
+            <label class="option">
+              <input type="radio" name="gender" value="female" required />
+              Female
+            </label>
+            <label class="option">
+              <input type="radio" name="gender" value="male" />
+              Male
+            </label>
+            <label class="option">
+              <input type="radio" name="gender" value="nonbinary" />
+              Non-binary
+            </label>
+            <label class="option">
+              <input type="radio" name="gender" value="prefer-not" />
+              Prefer not to say
+            </label>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="field half">
+          <label for="email" class="req">Email</label>
+          <input class="input" type="email" id="email" name="email" placeholder="you@example.com" required />
+        </div>
+
+        <!-- Phone -->
+        <div class="field half">
+          <label for="phone" class="req">Phone number</label>
+          <input class="input" type="tel" id="phone" name="phone" placeholder="+91 98765 43210" pattern="^[+0-9\\s-]{8,}$" required />
+          <span class="helper">Include country code if outside India.</span>
+        </div>
+
+        <!-- Course selection -->
+        <div class="field half">
+          <label for="course" class="req">Course selection</label>
+          <select id="course" name="course" required>
+            <option value="" disabled selected>Select a course</option>
+            <option value="bsc-cs">B.Sc. Computer Science</option>
+            <option value="bcom">B.Com</option>
+            <option value="ba-english">B.A. English</option>
+            <option value="bba">BBA</option>
+            <option value="diploma-it">Diploma in IT</option>
+          </select>
+        </div>
+
+        <!-- Notes -->
+        <div class="field">
+          <label for="notes">Additional notes</label>
+          <textarea id="notes" name="notes" rows="3" placeholder="Any preferences or questions?"></textarea>
+        </div>
+
+        <!-- Terms -->
+        <div class="field">
+          <div class="checkbox-group">
+            <label class="option">
+              <input type="checkbox" name="terms" required />
+              I agree to the terms and confirm the information is accurate.
+            </label>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          <button type="reset" class="btn btn-secondary">Reset</button>
+          <button type="submit" class="btn btn-primary">Submit registration</button>
+        </div>
+      </form>
+
+      <footer class="card-footer">
+        <span>Need help? Double‑check required fields marked with *</span>
+        <span>Made with vibrant gradients and accessible design</span>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>
